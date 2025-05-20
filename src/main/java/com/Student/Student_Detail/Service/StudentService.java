@@ -7,6 +7,8 @@ import com.Student.Student_Detail.dto.response.StudentResponce;
 import com.Student.Student_Detail.Entity.StudentEntity;
 import com.Student.Student_Detail.Repositaty.StudentRepository;
 import com.Student.Student_Detail.dto.response.SuccessMessage;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -105,7 +107,7 @@ public class StudentService {
         return "data has added successfully";
     }
 
-    public List<StudentResponce> getstudentdetail() {
+    public ResponseEntity<?> getstudentdetail() {
         List<StudentEntity> studentEntityList = studentRepository.findAll();
         List<StudentResponce> studentResponceList = new ArrayList<>();
         for (StudentEntity studentEntity : studentEntityList) {
@@ -117,20 +119,20 @@ public class StudentService {
             studentResponce1.setMotherName(studentEntity.getMotherName());
             studentResponceList.add(studentResponce1);
         }
-        return studentResponceList;
+        return new  ResponseEntity<>(studentResponceList, HttpStatus.OK);
     }
 
-    public String Deletebyid(StudentRequest studentRequest) {
+    public ResponseEntity<?> Deletebyid(StudentRequest studentRequest) {
         Long id = studentRequest.getId();
         Optional<StudentEntity> studentEntity = studentRepository.findById(id);
         if (studentEntity.isPresent()) {
             studentRepository.deleteById(id);
-            return "data has been deleted successfully";
+            return new ResponseEntity<>("the data has been deleted successfully",HttpStatus.NO_CONTENT);
         }
-        return "the id you have been given is not identified";
+       return new ResponseEntity<>("the datat is not fonud",HttpStatus.NOT_FOUND);
     }
 
-    public SuccessMessage modifyStudentDetail(ModifyById modifyById) {
+    public ResponseEntity<?> modifyStudentDetail(ModifyById modifyById) {
         Long id = modifyById.getId();
         Optional<StudentEntity> studentEntityOptional = studentRepository.findById(id);
 
@@ -148,15 +150,10 @@ public class StudentService {
             StudentEntity student = studentRepository.save(studentEntity);
 
             if (student != null) {
-                SuccessMessage studentResponce1 = new SuccessMessage();
-                studentResponce1.setCode("0");
-                studentResponce1.setStatus("OK");
-                studentResponce1.setMessage("Successfully updated student detail");
-                return studentResponce1;
+                return  new ResponseEntity<>("the data has been modified successfully",HttpStatus.OK);
             } else {
-                SuccessMessage wrongResponse = new SuccessMessage();
-                wrongResponse.setMessage("Unable to modify student detail");
-                return wrongResponse;
+
+                return new  ResponseEntity<>("the data is not fonud",HttpStatus.NOT_FOUND);
 
             }
 
@@ -166,7 +163,7 @@ public class StudentService {
     }
 
 
-    public List<StudentResponce> findbyid(StudentResponce studentResponce) {
+    public ResponseEntity<?> findbyid(StudentResponce studentResponce) {
         Long id = studentResponce.getId();
         List<StudentResponce> studentResponceList = new ArrayList<>();
         Optional<StudentEntity> studentEntityOptional = studentRepository.findById(studentResponce.getId());
@@ -179,41 +176,11 @@ public class StudentService {
             studentResponce1.setMotherName(studentEntityOptional.get().getMotherName());
 
             studentResponceList.add(studentResponce1);
+            return new ResponseEntity<>(studentResponceList, HttpStatus.OK);
         }
-        return studentResponceList;
+        return new  ResponseEntity<>("the data is not fonud",HttpStatus.NOT_FOUND);
     }
 
-    public SuccessMessage modifybyid(ModifyById modifyById) {
-        Long id = modifyById.getId();
-        Optional<StudentEntity> studentEntityOptional = studentRepository.findById(id);
-        if (studentEntityOptional.isPresent()) {
-            StudentEntity studentEntity = studentEntityOptional.get();
-            // uplode
-            studentEntity.setFirstName(modifyById.getFirstName());
-            studentEntity.setEmail(modifyById.getEmail());
-            studentEntity.setFatherName(modifyById.getFatherName());
-            studentEntity.setMotherName(modifyById.getMotherName());
-            StudentEntity student = studentRepository.save(studentEntity);
-            if (student != null) {
-                SuccessMessage studentResponce1 = new SuccessMessage();
-
-                studentResponce1.setCode("0");
-
-                studentResponce1.setStatus("OK");
-                studentResponce1.setMessage("Successfully updated student detail");
-                return studentResponce1;
-            }
-            else
-            {
-                SuccessMessage wrongResponse = new SuccessMessage();
-                wrongResponse.setMessage("Unable to modify student detail");
-                return wrongResponse;
-            }
-        }
-        else {
-            throw new RuntimeException("Student not found with id: " + id);
-        }
-    }
 }
 
 
