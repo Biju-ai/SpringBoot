@@ -1,0 +1,71 @@
+package com.Student.Student_Detail.Controller;
+
+import com.Student.Student_Detail.Entity.StudentEntity;
+import com.Student.Student_Detail.dto.request.AddStudentRequest;
+import com.Student.Student_Detail.dto.request.ModifyById;
+import com.Student.Student_Detail.dto.request.ModifyStudent;
+import com.Student.Student_Detail.dto.request.StudentRequest;
+import com.Student.Student_Detail.dto.response.StudentResponce;
+import com.Student.Student_Detail.Service.StudentService;
+import com.Student.Student_Detail.dto.response.SuccessMessage;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RestController
+@RequestMapping("/Studentapi")
+public class StudentController {
+
+    private final StudentService studentService;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
+//    @PostMapping("/put")
+//    public AddStudentRequest puutstudentdetailt(@RequestBody AddStudentRequest addStudentRequest) {
+//      return  studentService.putstudentdetail(addStudentRequest);
+//
+//    }
+//    @PostMapping("/get")
+//    public List<StudentResponce> getdetail() {
+//        return studentService.getstudentdetail();
+//    }
+//        @PostMapping("/delete")
+//    public String delete(@RequestBody StudentRequest studentRequest) {
+//        return studentService.deletestudentdetail(studentRequest);
+//        }
+//
+//        @PostMapping("/modify")
+//    public String modify(@RequestBody ModifyStudent modifyStudent) {
+//        return studentService.modifystudentdetail(modifyStudent);
+//        }
+//
+//        @PostMapping("/look")
+//    public StudentResponce look(@RequestBody StudentResponce studentResponce) {
+//        return studentService.getstudentdetailById(studentResponce);
+//        }
+//
+        @PostMapping("/insert")
+    public String insert(@RequestBody AddStudentRequest addStudentRequest) {
+        return studentService.getaddstudentdetail(addStudentRequest);
+        }
+        @PostMapping("/look")
+    public List<StudentResponce> look() {
+        return studentService.getstudentdetail();
+        }
+        @PostMapping("/delete")
+    public String delete(@RequestBody  StudentRequest studentRequest) {
+        return studentService.Deletebyid(studentRequest);
+        }
+        @PostMapping("/modify")
+    public SuccessMessage modify(@RequestBody ModifyById modifyById) {
+        return studentService.modifyStudentDetail(modifyById);
+        }
+        @PostMapping("/find")
+    public List<StudentResponce> find(@RequestBody StudentResponce studentResponce) {
+        return studentService.findbyid(studentResponce);
+        }
+
+}
