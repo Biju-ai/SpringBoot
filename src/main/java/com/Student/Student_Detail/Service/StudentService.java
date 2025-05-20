@@ -147,13 +147,13 @@ public class StudentService {
 
             StudentEntity student = studentRepository.save(studentEntity);
 
-            if(student != null) {
+            if (student != null) {
                 SuccessMessage studentResponce1 = new SuccessMessage();
                 studentResponce1.setCode("0");
                 studentResponce1.setStatus("OK");
                 studentResponce1.setMessage("Successfully updated student detail");
                 return studentResponce1;
-            }else{
+            } else {
                 SuccessMessage wrongResponse = new SuccessMessage();
                 wrongResponse.setMessage("Unable to modify student detail");
                 return wrongResponse;
@@ -183,7 +183,41 @@ public class StudentService {
         return studentResponceList;
     }
 
+    public SuccessMessage modifybyid(ModifyById modifyById) {
+        Long id = modifyById.getId();
+        Optional<StudentEntity> studentEntityOptional = studentRepository.findById(id);
+        if (studentEntityOptional.isPresent()) {
+            StudentEntity studentEntity = studentEntityOptional.get();
+            // uplode
+            studentEntity.setFirstName(modifyById.getFirstName());
+            studentEntity.setEmail(modifyById.getEmail());
+            studentEntity.setFatherName(modifyById.getFatherName());
+            studentEntity.setMotherName(modifyById.getMotherName());
+            StudentEntity student = studentRepository.save(studentEntity);
+            if (student != null) {
+                SuccessMessage studentResponce1 = new SuccessMessage();
+
+                studentResponce1.setCode("0");
+
+                studentResponce1.setStatus("OK");
+                studentResponce1.setMessage("Successfully updated student detail");
+                return studentResponce1;
+            }
+            else
+            {
+                SuccessMessage wrongResponse = new SuccessMessage();
+                wrongResponse.setMessage("Unable to modify student detail");
+                return wrongResponse;
+            }
+        }
+        else {
+            throw new RuntimeException("Student not found with id: " + id);
+        }
     }
+}
+
+
+
 
 
 
