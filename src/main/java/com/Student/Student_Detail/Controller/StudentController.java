@@ -1,10 +1,10 @@
 package com.Student.Student_Detail.Controller;
 
+import com.Student.Student_Detail.Entity.StudentClass;
+import com.Student.Student_Detail.Entity.StudentDetail;
 import com.Student.Student_Detail.Entity.StudentEntity;
-import com.Student.Student_Detail.dto.request.AddStudentRequest;
-import com.Student.Student_Detail.dto.request.ModifyById;
-import com.Student.Student_Detail.dto.request.ModifyStudent;
-import com.Student.Student_Detail.dto.request.StudentRequest;
+import com.Student.Student_Detail.dto.request.*;
+import com.Student.Student_Detail.dto.response.StudentDetailRepoAdd;
 import com.Student.Student_Detail.dto.response.StudentResponce;
 import com.Student.Student_Detail.Service.StudentService;
 import com.Student.Student_Detail.dto.response.SuccessMessage;
@@ -74,6 +74,14 @@ public class StudentController {
     @PostMapping("/find")
     public ResponseEntity<?> find(@RequestBody StudentResponce studentResponce) {
         return studentService.findbyid(studentResponce);
+    }
+    @PostMapping("/studentadd")
+    public StudentClass studentadd(@RequestBody StudentClass studentClass) {
+        return studentService.InsertData(studentClass);
+    }
+    @PostMapping("/studentFind")
+    public StudentDetail findstudent(@RequestBody StudentDetailRepoAdd  studentDetailRepoAdd) {
+        return studentService.InsertData3(studentDetailRepoAdd);
     }
 
 }

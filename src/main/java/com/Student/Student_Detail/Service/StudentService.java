@@ -1,8 +1,14 @@
 package com.Student.Student_Detail.Service;
 
+import com.Student.Student_Detail.Entity.StudentClass;
+import com.Student.Student_Detail.Entity.StudentDetail;
+import com.Student.Student_Detail.Repositaty.StudentClassRepo;
+import com.Student.Student_Detail.Repositaty.StudentDetailRepo;
 import com.Student.Student_Detail.dto.request.AddStudentRequest;
 import com.Student.Student_Detail.dto.request.ModifyById;
+import com.Student.Student_Detail.dto.request.StudentClassRequest;
 import com.Student.Student_Detail.dto.request.StudentRequest;
+import com.Student.Student_Detail.dto.response.StudentDetailRepoAdd;
 import com.Student.Student_Detail.dto.response.StudentResponce;
 import com.Student.Student_Detail.Entity.StudentEntity;
 import com.Student.Student_Detail.Repositaty.StudentRepository;
@@ -18,9 +24,13 @@ import java.util.Optional;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final StudentClassRepo studentClassRepo;
+    private final StudentDetailRepo studentDetailRepo;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, StudentClassRepo studentClassRepo, StudentDetailRepo studentDetailRepo) {
         this.studentRepository = studentRepository;
+        this.studentClassRepo = studentClassRepo;
+        this.studentDetailRepo = studentDetailRepo;
     }
 
 //    public AddStudentRequest putstudentdetail(AddStudentRequest addStudentRequest) {
@@ -179,6 +189,19 @@ public class StudentService {
             return new ResponseEntity<>(studentResponceList, HttpStatus.OK);
         }
         return new  ResponseEntity<>("the data is not fonud",HttpStatus.NOT_FOUND);
+    }
+    public StudentClass InsertData(StudentClass studentClass) {
+        StudentClass studentClass1 = new StudentClass();
+        studentClass1.setClassName(studentClass.getClassName());
+        return studentClassRepo.save(studentClass);
+    }
+    public StudentDetail InsertData3(StudentDetailRepoAdd studentDetailRepoAdd) {
+        StudentDetail studentDetail = new StudentDetail();
+       studentDetail.setName(studentDetailRepoAdd.getName());
+       studentDetail.setLasnName(studentDetailRepoAdd.getLasnName());
+       studentDetail.setStudentClass(studentClassRepo.findById(studentDetailRepoAdd.getId()).get());
+       return studentDetailRepo.save(studentDetail);
+
     }
 
 }
